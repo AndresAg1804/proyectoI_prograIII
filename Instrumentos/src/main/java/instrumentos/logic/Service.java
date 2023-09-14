@@ -164,4 +164,7 @@ public class Service {
     }
 
 
- }
+    public void reportPDFTipos(){
+
+    }
+}

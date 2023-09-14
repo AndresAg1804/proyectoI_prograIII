@@ -3,6 +3,8 @@ package instrumentos.presentation.tipos;
 import instrumentos.Application;
 import instrumentos.logic.Service;
 import instrumentos.logic.TipoInstrumento;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,5 +76,48 @@ public class Controller{
         model.setMode(Application.MODE_CREATE);
         model.commit();
     }
+
+    public void generatePdfReport() {
+        Document document = new Document();
+
+        try {
+            List<TipoInstrumento> list = Service.instance().search(new TipoInstrumento());
+            PdfWriter.getInstance(document, new FileOutputStream("reporteTipos.pdf"));
+            document.open();
+
+            // Título del reporte
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+            Paragraph title = new Paragraph("Reporte de Tipos de Instrumentos", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            // Tabla de contenido
+            PdfPTable table = new PdfPTable(3); // 3 columnas
+            table.setWidthPercentage(100);
+
+            // Encabezados de la tabla
+            Font tableHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            PdfPCell cell = new PdfPCell(new Phrase("Código", tableHeaderFont));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("Nombre", tableHeaderFont));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("Unidad", tableHeaderFont));
+            table.addCell(cell);
+
+            // Datos de la tabla
+            Font tableDataFont = FontFactory.getFont(FontFactory.HELVETICA);
+            for (TipoInstrumento tipo : list) {
+                table.addCell(new Phrase(tipo.getCodigo(), tableDataFont));
+                table.addCell(new Phrase(tipo.getNombre(), tableDataFont));
+                table.addCell(new Phrase(tipo.getUnidad(), tableDataFont));
+            }
+
+            document.add(table);
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

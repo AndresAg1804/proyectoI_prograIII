@@ -101,10 +101,10 @@ public class View implements Observer {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try{
-
+                    controller.generatePdfReport();
                 }
                 catch (Exception ex){
-
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
