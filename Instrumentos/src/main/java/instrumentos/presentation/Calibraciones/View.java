@@ -48,6 +48,7 @@ public class View implements Observer {
             public void componentShown(ComponentEvent e) {
                 instruField.setForeground(Color.RED);
                 instruField.setText(controller.shown());
+                numero.setEnabled(false);
                 clearTextFields();  //agregado por los loles
 
                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -65,8 +66,14 @@ public class View implements Observer {
             public void actionPerformed(ActionEvent e) {
                 try {
                     Calibraciones filter = new Calibraciones();
-                    filter.setNumero(Integer.parseInt(searchNumero.getText()));
-                    controller.search(model.getInstrumento(), filter);
+                    if (!searchNumero.getText().isEmpty()) {
+                        // Si el campo no está vacío, llamar a controller.search con el instrumento y el filtro
+                        filter.setNumero(Integer.parseInt(searchNumero.getText()));
+                        controller.search(model.getInstrumento(), filter);
+                    } else {
+                        // Si el campo está vacío, llamar a controller.search solo con el instrumento
+                        controller.search(model.getInstrumento(), null);
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -78,13 +85,15 @@ public class View implements Observer {
                 int row = list.getSelectedRow();
                 model.setMode(Application.MODE_EDIT);
                 try {
+                    fecha.setEnabled(false);
+                    mediciones.setEnabled(false);
                     Medi.setVisible(true);
                     Medi.setEnabled(true);
                     controller.edit(row);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-                numero.setEnabled(false);
+
                 delete.setEnabled(true);
             }
         });
@@ -131,6 +140,8 @@ public class View implements Observer {
             public void mouseClicked(MouseEvent e) {
                 clearTextFields();
                 Medi.setVisible(false);
+                fecha.setEnabled(true);
+                mediciones.setEnabled(true);
             }
         });
 
@@ -233,7 +244,6 @@ public class View implements Observer {
 
     public void clearTextFields(){
         controller.clear();
-        numero.setEnabled(true);
         delete.setEnabled(false);
     }
     public boolean isValid(){

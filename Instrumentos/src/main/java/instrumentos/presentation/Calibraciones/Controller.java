@@ -30,8 +30,17 @@ public class Controller {
 
         List<Calibraciones> existentes = instru.getCalibraciones();
 
+        if(filter==null){
+            instru.setCalibraciones(existentes);
+            model.setList(existentes);
+            model.setCurrent(existentes.get(0));
+            model.commit();
+            return;
+        }
+
         List<Calibraciones> rows = Service.instance().search(instru, filter);
-        if (existentes.isEmpty()) {
+
+        if (existentes.isEmpty()&&filter!=null) {
             model.setList(rows);
             instru.setCalibraciones(rows);
             model.setCurrent(rows.get(0));
