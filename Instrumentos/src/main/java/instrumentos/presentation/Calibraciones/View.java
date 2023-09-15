@@ -3,8 +3,10 @@ package instrumentos.presentation.Calibraciones;
 import instrumentos.Application;
 import instrumentos.logic.Calibraciones;
 import instrumentos.logic.Instrumento;
+import instrumentos.logic.Mediciones;
 
 import javax.swing.*;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
@@ -35,12 +37,12 @@ public class View implements Observer {
     private JLabel fechaLbl;
     private JButton clear;
     private JTable list2;
-    private JPanel Mediciones;
+    private JPanel Medi;
     private JLabel instruField;
 
     public View() {
         delete.setEnabled(false);
-        Mediciones.setVisible(false);
+        Medi.setVisible(false);
         panel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
@@ -55,7 +57,7 @@ public class View implements Observer {
                 // Establecer la fecha actual formateada como valor por defecto en el TextField 'fecha'
                 fecha.setText(fechaActualFormateada);
 
-                Mediciones.setVisible(false);  //agregado por los loles
+                Medi.setVisible(false);  //agregado por los loles
             }
         });
         search.addActionListener(new ActionListener() {
@@ -76,8 +78,8 @@ public class View implements Observer {
                 int row = list.getSelectedRow();
                 model.setMode(Application.MODE_EDIT);
                 try {
-                    Mediciones.setVisible(true);
-                    Mediciones.setEnabled(true);
+                    Medi.setVisible(true);
+                    Medi.setEnabled(true);
                     controller.edit(row);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
@@ -86,6 +88,7 @@ public class View implements Observer {
                 delete.setEnabled(true);
             }
         });
+
         save.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -102,6 +105,8 @@ public class View implements Observer {
                         throw new Exception("Campos vacios");
                     }
                     controller.save(filter);
+                    clearTextFields();
+                    Medi.setVisible(false);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -125,10 +130,37 @@ public class View implements Observer {
             @Override
             public void mouseClicked(MouseEvent e) {
                 clearTextFields();
-                Mediciones.setVisible(false);
+                Medi.setVisible(false);
             }
         });
     }
+
+    public void changeList2(int row, int column) {
+        if (column == 2 && list2.isCellEditable(row, column)) {
+            // Asegúrate de que la celda esté en modo de edición
+            list2.setValueAt(list2.getValueAt(row,column),row,column);
+
+
+            // Luego, obtén el editor de celdas y solicita el foco para empezar a editar
+            Component editor = list2.getEditorComponent();
+            if (editor != null) {
+                editor.requestFocus();
+
+                Mediciones me = model.getCurrent().getMedicionesList().get(row);
+                Object cellValue = list2.getValueAt(row, column);
+
+                if (cellValue != null) {
+                    me.setLectura(cellValue.toString());
+                    try {
+                        controller.edit2(row, me);
+                    } catch (Exception ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            }
+        }
+    }
+
 
     public JPanel getPanel() {
         return panel;
@@ -147,6 +179,14 @@ public class View implements Observer {
         model.addObserver(this);
     }
 
+    public boolean isCellEdi(int row, int column) {
+        // Obtener el modelo de datos de la JTable
+        TableModelMediciones table = (TableModelMediciones) list2.getModel();
+
+        // Verificar si la celda en la fila 'row' y columna 'column' es editable
+        return table.isCellEditable(row, column);
+    }
+
     @Override
     public void update(Observable updatedModel, Object properties) {
         int changedProps = (int) properties;
@@ -163,9 +203,10 @@ public class View implements Observer {
             // Aquí configurarías la segunda tabla (list2) de manera similar a como lo hiciste con la primera tabla (list)
             // Puedes crear un nuevo modelo, configurar columnas, etc., según tus necesidades
             // Por ejemplo:
-            int[] cols2 = {TableModelMediciones.MEDIDA, TableModelMediciones.REFERENCIA, TableModelMediciones.LECTURA};
-            list2.setModel(new TableModelMediciones(cols2, model.getCurrent().getMedicionesList()));
+            int[] cols = {TableModelMediciones.MEDIDA, TableModelMediciones.REFERENCIA, TableModelMediciones.LECTURA};
+            list2.setModel(new TableModelMediciones(cols, model.getCurrent().getMedicionesList()));
             list2.setRowHeight(30);
+            TableColumnModel columnModel = list2.getColumnModel();
         }
 
         if ((changedProps & Model.CURRENT) == Model.CURRENT) {

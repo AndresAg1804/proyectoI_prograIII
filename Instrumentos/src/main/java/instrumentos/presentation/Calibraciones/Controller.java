@@ -2,6 +2,7 @@ package instrumentos.presentation.Calibraciones;
 
 import instrumentos.Application;
 import instrumentos.logic.Instrumento;
+import instrumentos.logic.Mediciones;
 import instrumentos.logic.Service;
 import instrumentos.logic.Calibraciones;
 
@@ -61,6 +62,20 @@ public class Controller {
         model.commit();
     }
 
+    public void edit2(int row, Mediciones medi) throws Exception {
+        model.setMode(Application.MODE_EDIT);
+
+        // Obtener la lista actual de mediciones
+        List<Mediciones> med = model.getCurrent().getMedicionesList();
+
+        // Actualizar la medición en la posición 'row' con la nueva medición 'medi'
+        med.set(row, medi);
+
+        // Actualizar la lista de mediciones en el modelo
+        model.setListmed(med);
+        model.commit();
+    }
+
     public void save(Calibraciones e) throws Exception {
         if (model.getInstrumento().getSerie() == "") {
             throw new Exception("No hay instrumento seleccionado");
@@ -71,10 +86,6 @@ public class Controller {
             model.commit();
             //model.getInstrumento().getCalibraciones().add(e);
             //this.search(model.getInstrumento(), new Calibraciones());
-        }
-        if (model.getMode() == 2) {
-            Service.instance().update(model.getInstrumento(), e);
-            this.search(model.getInstrumento(), new Calibraciones());
         }
     }
 

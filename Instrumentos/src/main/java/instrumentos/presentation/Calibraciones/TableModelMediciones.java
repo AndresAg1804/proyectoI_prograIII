@@ -44,6 +44,12 @@ public class TableModelMediciones extends AbstractTableModel implements javax.sw
     }
 
 
+    public void setValueAt(Object value, int rowIndex, int columIndex){
+        Mediciones e = rows.get(rowIndex);
+        switch (cols[columIndex]){
+            case LECTURA: e.setLectura((String)value); break;
+        }
+    }
 
     public Object getValueAt(int row, int col) {
         Mediciones sucursal = rows.get(row);
@@ -68,6 +74,12 @@ public class TableModelMediciones extends AbstractTableModel implements javax.sw
         colNames[MEDIDA]= "Medida";
         colNames[REFERENCIA]= "Referencia";
         colNames[LECTURA]= "Lectura";
+    }
+
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        // Habilitar la edición solo para la columna "LECTURA" (índice 2)
+        return col == TableModelMediciones.LECTURA;
     }
 
 }
