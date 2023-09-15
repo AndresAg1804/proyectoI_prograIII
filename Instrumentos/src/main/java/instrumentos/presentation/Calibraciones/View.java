@@ -133,6 +133,18 @@ public class View implements Observer {
                 Medi.setVisible(false);
             }
         });
+
+        report.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.generatePdfReport();
+                }
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
     }
 
     public void changeList2(int row, int column) {
@@ -220,10 +232,7 @@ public class View implements Observer {
 
 
     public void clearTextFields(){
-        model.setMode(Application.MODE_CREATE);
-        numero.setText(null);
-        mediciones.setText(null);
-        fecha.setText(null);
+        controller.clear();
         numero.setEnabled(true);
         delete.setEnabled(false);
     }

@@ -122,6 +122,18 @@ public class View implements Observer {
                 clearTextFields();
             }
         });
+
+        report.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    controller.generatePdfReport();
+                }
+                catch (Exception ex){
+                    JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
     }
 
     public JPanel getPanel() {

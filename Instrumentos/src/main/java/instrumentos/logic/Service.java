@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.io.*;
+
 
 public class Service {
     private static Service theInstance;
@@ -117,6 +117,10 @@ public class Service {
 
     //================= Calibraciones ============
 
+    /*public long validateDelete(Instrumento e){
+        return data.getCalibraciones().stream()
+                .filter(i->i.getInstrumento().getCalibraciones().size().getSerie().equals(e.getSerie())).count();
+    }*/
     public void create(Instrumento instru, Calibraciones e) throws Exception {   //cambiado...
         //Calibraciones result = data.getCalibraciones().stream()
           //      .filter(i-> Objects.equals(i.getNumero(), e.getNumero())).findFirst().orElse(null);
@@ -164,7 +168,5 @@ public class Service {
     }
 
 
-    public void reportPDFTipos(){
 
-    }
 }

@@ -1,4 +1,0 @@
-Reporte de Tipos de Instrumentos
-Codigo	Nombre	Unidad
-BAR	Barometro	PSI
-TER	Termómetro	Grados Celsius

@@ -77,7 +77,7 @@ public class Controller{
         model.commit();
     }
 
-    public void generatePdfReport() {
+    public void generatePdfReport() throws Exception{
         Document document = new Document();
 
         try {
@@ -90,6 +90,17 @@ public class Controller{
             Paragraph title = new Paragraph("Reporte de Tipos de Instrumentos", titleFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
+
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+
+            Image img = Image.getInstance("Instrumentos/src/main/resources/instrumentos/presentation/icons/LogoUNA.svg.png"); // Reemplaza con la ruta de tu imagen
+            img.setAlignment(Element.ALIGN_CENTER);
+            img.scaleToFit(300, 200); // Ajusta el tamaño de la imagen según tus necesidades
+            document.add(img);
+
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
 
             // Tabla de contenido
             PdfPTable table = new PdfPTable(3); // 3 columnas
@@ -113,9 +124,13 @@ public class Controller{
             }
 
             document.add(table);
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Creadores: Anner Andrés Angulo Gutiérrez y Marcos Emilio Vásquez Díaz", tableDataFont));
+
             document.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new Exception("Error al generar el reporte");
         }
     }
 
