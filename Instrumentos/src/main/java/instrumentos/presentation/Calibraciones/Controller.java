@@ -159,8 +159,119 @@ public class Controller {
         Document document = new Document();
 
         try {
-            List<Calibraciones> list = Service.instance().search(model.getInstrumento(),new Calibraciones());
-            List<Mediciones> list2 = list.stream().flatMap(calibracion -> calibracion.getMedicionesList().stream()).collect(Collectors.toList());
+            List<Calibraciones> list = Service.instance().search2(model.getInstrumento(), new Calibraciones());
+            System.out.println("Número de elementos en list: " + list.size());
+
+            PdfWriter.getInstance(document, new FileOutputStream("reporteCalibraciones.pdf"));
+            document.open();
+
+            // Título del reporte
+            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
+            Paragraph title = new Paragraph("Reporte de Calibraciones", titleFont);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+
+            Image img = Image.getInstance("Instrumentos/src/main/resources/instrumentos/presentation/icons/LogoUNA.svg.png");
+            img.setAlignment(Element.ALIGN_CENTER);
+            img.scaleToFit(300, 200);
+            document.add(img);
+
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+
+            Font tableHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            Font tableDataFont = FontFactory.getFont(FontFactory.HELVETICA);
+
+            list.forEach(calibracion -> {
+                // Encabezados de la tabla de calibración
+
+                Paragraph titleCali = new Paragraph("Calibracion # "+ String.valueOf(calibracion.getNumero()), titleFont);
+
+                try {
+                    document.add(titleCali);
+                    document.add(new Paragraph(" "));
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
+
+                PdfPTable table = new PdfPTable(3); // 3 columnas
+                table.setWidthPercentage(100);
+
+                PdfPCell cell = new PdfPCell(new Phrase("Numero", tableHeaderFont));
+                table.addCell(cell);
+                cell = new PdfPCell(new Phrase("Fecha", tableHeaderFont));
+                table.addCell(cell);
+                cell = new PdfPCell(new Phrase("Mediciones", tableHeaderFont));
+                table.addCell(cell);
+
+                // Datos de la calibración
+                table.addCell(new Phrase(String.valueOf(calibracion.getNumero()), tableDataFont));
+                table.addCell(new Phrase(calibracion.getFecha(), tableDataFont));
+                table.addCell(new Phrase(String.valueOf(calibracion.getMediciones()), tableDataFont));
+
+                // Encabezados de la tabla de mediciones
+                PdfPTable table2 = new PdfPTable(3); // 3 columnas
+                table2.setWidthPercentage(100);
+
+                PdfPCell cell2 = new PdfPCell(new Phrase("Medida", tableHeaderFont));
+                table2.addCell(cell2);
+                cell2 = new PdfPCell(new Phrase("Referencia", tableHeaderFont));
+                table2.addCell(cell2);
+                cell2 = new PdfPCell(new Phrase("Lectura", tableHeaderFont));
+                table2.addCell(cell2);
+
+                // Datos de las mediciones
+                for (Mediciones medicion : calibracion.getMedicionesList()) {
+                    table2.addCell(new Phrase(String.valueOf(medicion.getMedida()), tableDataFont));
+                    table2.addCell(new Phrase(String.valueOf(medicion.getReferencia()), tableDataFont));
+                    table2.addCell(new Phrase(String.valueOf(medicion.getLectura()), tableDataFont));
+                }
+
+                // Agrega la tabla de calibración al documento
+                try {
+                    document.add(table);
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+
+                // Agrega la tabla de mediciones al documento
+                try {
+                    document.add(table2);
+                } catch (DocumentException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    document.add(new Paragraph(" "));
+                    document.add(new Paragraph(" "));
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Creadores: Anner Andrés Angulo Gutiérrez y Marcos Emilio Vásquez Díaz", tableDataFont));
+
+            document.close();
+        } catch (Exception e) {
+            throw new Exception("Error al generar el reporte");
+        }
+    }
+
+
+    /*
+    public void generatePdfReport() throws Exception {
+        Document document = new Document();
+
+        try {
+            List<Calibraciones> list = Service.instance().search2(model.getInstrumento(),new Calibraciones());          // con el search normal, no sirve ya que agrega a la lista si son ==, ocupamos uno que sea !=...
+            System.out.println("Número de elementos en list: " + list.size());
+
+            List<Mediciones> list2 = model.getInstrumento().getCalibraciones().stream().flatMap(calibracion -> calibracion.getMedicionesList().stream()).collect(Collectors.toList());
+            //List<Mediciones> list2 = list.stream().flatMap(calibracion -> calibracion.getMedicionesList().stream()).collect(Collectors.toList());
             PdfWriter.getInstance(document, new FileOutputStream("reporteCalibraciones.pdf"));
             document.open();
 
@@ -189,12 +300,15 @@ public class Controller {
 
             // Encabezados de la tabla
             Font tableHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+
             PdfPCell cell = new PdfPCell(new Phrase("Numero", tableHeaderFont));
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("Fecha", tableHeaderFont));
             table.addCell(cell);
             cell = new PdfPCell(new Phrase("Mediciones", tableHeaderFont));
             table.addCell(cell);
+
+
 
             PdfPCell cell2 = new PdfPCell(new Phrase("Medida", tableHeaderFont));
             table2.addCell(cell2);
@@ -203,19 +317,34 @@ public class Controller {
             cell2 = new PdfPCell(new Phrase("Lectura", tableHeaderFont));
             table2.addCell(cell2);
 
+
+
             // Datos de la tabla
             Font tableDataFont = FontFactory.getFont(FontFactory.HELVETICA);
-            for (Calibraciones calibracion : list) {
+
+
+            list.forEach(calibracion -> {
+                PdfPCell cell = new PdfPCell(new Phrase("Numero", tableHeaderFont));
+                table.addCell(cell);
+                cell = new PdfPCell(new Phrase("Fecha", tableHeaderFont));
+                table.addCell(cell);
+                cell = new PdfPCell(new Phrase("Mediciones", tableHeaderFont));
+                table.addCell(cell);
                 table.addCell(new Phrase(String.valueOf(calibracion.getNumero()), tableDataFont));
                 table.addCell(new Phrase(calibracion.getFecha(), tableDataFont));
                 table.addCell(new Phrase(String.valueOf(calibracion.getMediciones()), tableDataFont));
-                for(Mediciones medicion : calibracion.getMedicionesList()){
+                for (Mediciones medicion : calibracion.getMedicionesList()) {
+                    PdfPCell cell2 = new PdfPCell(new Phrase("Medida", tableHeaderFont));
+                    table2.addCell(cell2);
+                    cell2 = new PdfPCell(new Phrase("Referencia", tableHeaderFont));
+                    table2.addCell(cell2);
+                    cell2 = new PdfPCell(new Phrase("Lectura", tableHeaderFont));
+                    table2.addCell(cell2);
                     table2.addCell(new Phrase(String.valueOf(medicion.getMedida()), tableDataFont));
                     table2.addCell(new Phrase(String.valueOf(medicion.getReferencia()), tableDataFont));
                     table2.addCell(new Phrase(String.valueOf(medicion.getLectura()), tableDataFont));
                 }
-
-            }
+            });
 
             document.add(table);
             document.add(table2);
@@ -228,5 +357,6 @@ public class Controller {
             throw new Exception("Error al generar el reporte");
         }
     }
+    */
 
 }

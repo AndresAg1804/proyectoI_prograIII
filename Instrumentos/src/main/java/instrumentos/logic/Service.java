@@ -167,6 +167,16 @@ public class Service {
                 .collect(Collectors.toList());
     }
 
+    public List<Calibraciones> search2(Instrumento instru, Calibraciones e){
+        if(instru == null){
+            Instrumento ins = new Instrumento();
+            return ins.getCalibraciones();
+        }
+        return instru.getCalibraciones().stream()
+                .filter(i->i.getNumero()!=(e.getNumero()))
+                .sorted(Comparator.comparing(Calibraciones::getNumero))  // lo cambiamos a ::getUNidad en clase, pero estaba en ::getNombre...
+                .collect(Collectors.toList());
+    }
 
 
 }
