@@ -237,6 +237,14 @@ public class Controller {
                     e.printStackTrace();
                 }
 
+                Paragraph titleMedi = new Paragraph("Mediciones de la calibracion # "+ String.valueOf(calibracion.getNumero()), titleFont);
+
+                try {
+                    document.add(titleMedi);
+                    document.add(new Paragraph(" "));
+                } catch (DocumentException e) {
+                    throw new RuntimeException(e);
+                }
                 // Agrega la tabla de mediciones al documento
                 try {
                     document.add(table2);
