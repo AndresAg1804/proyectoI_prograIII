@@ -67,7 +67,9 @@ public class Controller {
 
     public void edit(int row) throws Exception {
         model.setMode(Application.MODE_EDIT);
-        Calibraciones e = model.getInstrumento().getCalibraciones().get(row);
+        Calibraciones e = model.getCurrent().getInstrumento().getCalibraciones().get(row);
+        model.setInstrumento(model.getCurrent().getInstrumento());
+        e.setInstrumento(model.getCurrent().getInstrumento());
         model.setCurrent(e);
         model.commit();
         model.setListmed(e.getMedicionesList());
@@ -89,12 +91,12 @@ public class Controller {
     }
 
     public void save(Calibraciones e) throws Exception {
-        if (model.getInstrumento().getSerie() == "") {
+        if (model.getCurrent().getInstrumento().getSerie() == "") {
             throw new Exception("No hay instrumento seleccionado");
         }
         if (model.getMode() == 1) {
-            Service.instance().create(model.getInstrumento(), e);
-            model.setList(Service.instance().search(model.getInstrumento(), new Calibraciones()));
+            Service.instance().create(model.getCurrent().getInstrumento(), e);
+            model.setList(Service.instance().search(model.getCurrent().getInstrumento(), new Calibraciones()));
             model.commit();
 
         }

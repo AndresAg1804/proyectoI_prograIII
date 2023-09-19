@@ -1,11 +1,32 @@
 package instrumentos.logic;
 
+import jakarta.xml.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Calibraciones {
 
+    @XmlID
+    String numero;
+
+    String fecha;
+
+    int mediciones;
+
+    //@XmlIDREF
+    Instrumento instrumento;
+
+    @XmlIDREF
+    @XmlElementWrapper(name = "Mediciones")
+    @XmlElement(name = "Medicion")
+    List<Mediciones> medicionesList = new ArrayList<>();
+
+    public Calibraciones() {
+        this(new Instrumento(), "", 0);
+    }
     public List<Mediciones> getMedicionesList() {
         return medicionesList;
     }
@@ -14,27 +35,13 @@ public class Calibraciones {
         this.medicionesList = medicionesList;
     }
 
-    List<Mediciones> medicionesList = new ArrayList<>();
-    Instrumento instrumento;
-
-    String fecha;
-
-    int mediciones;
-
-    int numero;
-
-    public Calibraciones() {
-        this(new Instrumento(), "", 0);
-    }
-
-
     public Calibraciones(Instrumento inst, String fecha, int mediciones) {
         this.instrumento = inst;
         this.fecha = fecha;
         this.mediciones = mediciones;
 
         // Establece el valor de numero siempre en 0
-        this.numero = 0;
+        this.numero = String.valueOf(0);
 
         if (instrumento != null && mediciones != 0) {
             int refValor = inst.getMaximo() - inst.getMinimo();
@@ -42,13 +49,13 @@ public class Calibraciones {
             for (int i = 1; i < mediciones + 1; i++) {
                 if (i == 1) {
                     Mediciones med = new Mediciones();
-                    med.setMedida(1);
+                    med.setMedida(String.valueOf(1));
                     med.setReferencia("0");
                     med.setLectura("0");
                     medicionesList.add(med);
                 } else {
                     Mediciones med = new Mediciones();
-                    med.setMedida(i);
+                    med.setMedida(String.valueOf(i));
                     med.setReferencia(String.valueOf(refValor2));
                     med.setLectura("0");
                     medicionesList.add(med);
@@ -81,11 +88,11 @@ public class Calibraciones {
         this.fecha = fecha;
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(int nu) { this.numero = nu; }
+    public void setNumero(String nu) { this.numero = nu; }
 
     public int getMediciones() {
         return mediciones;

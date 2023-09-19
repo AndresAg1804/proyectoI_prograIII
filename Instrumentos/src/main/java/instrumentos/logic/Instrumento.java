@@ -22,9 +22,10 @@ public class Instrumento {
     int tolerancia;
     @XmlIDREF
     TipoInstrumento tipo;
-   // @XmlIDREF
-    //@XmlElementWrapper(name = "Calibraciones")
-    //@XmlElement(name = "Calibracion")
+    @XmlIDREF
+    @XmlElementWrapper(name = "Calibraciones")
+    @XmlElement(name = "Calibracion")
+    List<Calibraciones> calibraciones = new ArrayList<>();
 
     public List<Calibraciones> getCalibraciones() {
         return calibraciones;
@@ -33,8 +34,6 @@ public class Instrumento {
     public void setCalibraciones(List<Calibraciones> calibraciones) {
         this.calibraciones = calibraciones;
     }
-
-    List<Calibraciones> calibraciones = new ArrayList<>();
 
     public Instrumento() {
         this("","", 0, 0, 0, new TipoInstrumento());

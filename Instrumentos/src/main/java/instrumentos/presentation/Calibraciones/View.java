@@ -69,7 +69,7 @@ public class View implements Observer {
                     Calibraciones filter = new Calibraciones();
                     if (!searchNumero.getText().isEmpty()) {
                         // Si el campo no está vacío, llamar a controller.search con el instrumento y el filtro
-                        filter.setNumero(Integer.parseInt(searchNumero.getText()));
+                        filter.setNumero(String.valueOf(Integer.parseInt(searchNumero.getText())));
                         controller.search(model.getInstrumento(), filter);
                     } else {
                         // Si el campo está vacío, llamar a controller.search solo con el instrumento

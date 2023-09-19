@@ -120,7 +120,7 @@ public class Service {
     public void create(Instrumento instru, Calibraciones e) throws Exception {
         int num;
         num=instru.getCalibraciones().size()+1;
-        e.setNumero(num);
+        e.setNumero(String.valueOf(num));
         instru.getCalibraciones().add(e);
 
     }

@@ -1,17 +1,29 @@
 package instrumentos.logic;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlID;
+
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Mediciones {
-    public int getMedida() {
+
+    @XmlID
+    String Medida;
+
+    String Referencia;
+
+    String Lectura;
+
+
+    public String getMedida() {
         return Medida;
     }
 
-    public void setMedida(int medida) {
+    public void setMedida(String medida) {
         Medida = medida;
     }
-
-    int Medida;
 
     public String getReferencia() {
         return Referencia;
@@ -21,8 +33,6 @@ public class Mediciones {
         Referencia = referencia;
     }
 
-    String Referencia;
-
     public String getLectura() {
         return Lectura;
     }
@@ -31,13 +41,11 @@ public class Mediciones {
         Lectura = lectura;
     }
 
-    String Lectura;
-
     public Mediciones() {
-        this(0, "", "");
+        this("", "", "");
     }
 
-    public Mediciones(int me, String re, String lec){
+    public Mediciones(String me, String re, String lec){
         this.Medida = me;
         this.Referencia = re;
         this.Lectura = lec;

@@ -16,11 +16,11 @@ public class Data {
     @XmlElement(name = "tipo")
     private List<TipoInstrumento> tipos;
 
-    public List<Calibraciones> getCalibraciones() {
-        return calibraciones;
-    }
+    //public List<Calibraciones> getCalibraciones() {
+      //  return calibraciones;
+    //}
 
-    private List<Calibraciones> calibraciones;
+   // private List<Calibraciones> calibraciones;
     public List<Instrumento> getInstrumentos() {
         return instrumentos;
     }
@@ -30,7 +30,7 @@ public class Data {
     public Data() {
         tipos = new ArrayList<>();
         instrumentos = new ArrayList<>();
-        calibraciones = new ArrayList<>();
+        //calibraciones = new ArrayList<>();
 
     }
 
