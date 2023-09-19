@@ -128,6 +128,7 @@ public class View implements Observer {
                 int row = list.getSelectedRow();
                 try {
                     controller.del(row);
+                    Medi.setVisible(false);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
