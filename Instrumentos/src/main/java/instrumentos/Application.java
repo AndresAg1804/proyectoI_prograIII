@@ -8,10 +8,8 @@ import java.awt.event.WindowEvent;
 
 // Anner Andrés Angulo Gutierrez 504530978 y Marcos Emilio Vásquez Díaz 801530366
 
-//combo box de la pestanna de Instrumentos, no construirla a mano, si no, con la lista de instrumentos obtener el nommbre y mostrar las opciones...
 
 public class Application {
-    //cuadnos se borra el instrumento igual queda seleccinado en Calibraciones...
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");}

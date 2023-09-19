@@ -69,7 +69,7 @@ public class Service {
     public List<TipoInstrumento> search(TipoInstrumento e){
         return data.getTipos().stream()
                 .filter(i->i.getNombre().contains(e.getNombre()))
-                .sorted(Comparator.comparing(TipoInstrumento::getNombre))  // lo cambiamos a ::getUNidad en clase, pero estaba en ::getNombre...
+                .sorted(Comparator.comparing(TipoInstrumento::getNombre))
                 .collect(Collectors.toList());
     }
 
@@ -117,21 +117,12 @@ public class Service {
 
     //================= Calibraciones ============
 
-    /*public long validateDelete(Instrumento e){
-        return data.getCalibraciones().stream()
-                .filter(i->i.getInstrumento().getCalibraciones().size().getSerie().equals(e.getSerie())).count();
-    }*/
-    public void create(Instrumento instru, Calibraciones e) throws Exception {   //cambiado...
-        //Calibraciones result = data.getCalibraciones().stream()
-          //      .filter(i-> Objects.equals(i.getNumero(), e.getNumero())).findFirst().orElse(null);
-        //if (result==null)
+    public void create(Instrumento instru, Calibraciones e) throws Exception {
         int num;
         num=instru.getCalibraciones().size()+1;
         e.setNumero(num);
         instru.getCalibraciones().add(e);
-        //data.getCalibraciones().add(e);
 
-        //else throw new Exception("Tipo ya existe");
     }
 
     public Calibraciones read(Instrumento instru, Calibraciones e) throws Exception{
@@ -163,7 +154,7 @@ public class Service {
         }
         return instru.getCalibraciones().stream()
                 .filter(i->i.getNumero()==(e.getNumero()))
-                .sorted(Comparator.comparing(Calibraciones::getNumero))  // lo cambiamos a ::getUNidad en clase, pero estaba en ::getNombre...
+                .sorted(Comparator.comparing(Calibraciones::getNumero))
                 .collect(Collectors.toList());
     }
 
@@ -174,7 +165,7 @@ public class Service {
         }
         return instru.getCalibraciones().stream()
                 .filter(i->i.getNumero()!=(e.getNumero()))
-                .sorted(Comparator.comparing(Calibraciones::getNumero))  // lo cambiamos a ::getUNidad en clase, pero estaba en ::getNombre...
+                .sorted(Comparator.comparing(Calibraciones::getNumero))
                 .collect(Collectors.toList());
     }
 

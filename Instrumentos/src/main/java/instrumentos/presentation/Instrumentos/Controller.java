@@ -75,7 +75,6 @@ public class Controller{
     }
     public void clear(){
         model.setCurrent(new Instrumento());
-        //Calibraciones.setInstrumento(model.getCurrent());
         model.setMode(Application.MODE_CREATE);
         model.commit();
     }

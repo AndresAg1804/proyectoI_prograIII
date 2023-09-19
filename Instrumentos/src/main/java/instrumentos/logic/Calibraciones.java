@@ -15,15 +15,16 @@ public class Calibraciones {
     }
 
     List<Mediciones> medicionesList = new ArrayList<>();
-    static Instrumento instrumento;     //static???
+    static Instrumento instrumento;
 
     String fecha;
 
     int mediciones;
 
     int numero;
+
     public Calibraciones() {
-       this(new Instrumento(), "", 0);
+        this(new Instrumento(), "", 0);
     }
 
 
@@ -35,22 +36,17 @@ public class Calibraciones {
         // Establece el valor de numero siempre en 0
         this.numero = 0;
 
-        //if (mediciones != 0) {
-           // this.numero = 0;
-        //}
-
-        if(instrumento!=null && mediciones!=0) {
+        if (instrumento != null && mediciones != 0) {
             int refValor = inst.getMaximo() - inst.getMinimo();
             int refValor2 = refValor / mediciones;
-            for (int i = 1; i < mediciones+1; i++) {
+            for (int i = 1; i < mediciones + 1; i++) {
                 if (i == 1) {
                     Mediciones med = new Mediciones();
                     med.setMedida(1);
                     med.setReferencia("0");
                     med.setLectura("0");
                     medicionesList.add(med);
-                }
-                else {
+                } else {
                     Mediciones med = new Mediciones();
                     med.setMedida(i);
                     med.setReferencia(String.valueOf(refValor2));
@@ -62,7 +58,6 @@ public class Calibraciones {
         }
 
 
-
     }
 
     public static Instrumento getInstrumento() {
@@ -72,10 +67,6 @@ public class Calibraciones {
     public static void setInstrumento(Instrumento instrumen) {
         instrumento = instrumen;
     }
-
-    //public void disminuirCantidad(){
-      //  ultiNumero--;
-    //}
 
     public String getFecha() {
         return fecha;

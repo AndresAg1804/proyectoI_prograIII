@@ -26,7 +26,7 @@ public class Controller {
         view.setModel(model);
     }
 
-    public void search(Instrumento instru, Calibraciones filter) throws Exception {   // hay que pasarle instrumento tambien
+    public void search(Instrumento instru, Calibraciones filter) throws Exception {
 
         List<Calibraciones> existentes = instru.getCalibraciones();
 
@@ -65,7 +65,7 @@ public class Controller {
         instru.setCalibraciones(existentes);
     }
 
-    public void edit(int row) throws Exception {     //cambiado
+    public void edit(int row) throws Exception {
         model.setMode(Application.MODE_EDIT);
         Calibraciones e = model.getInstrumento().getCalibraciones().get(row);
         model.setCurrent(e);
@@ -96,8 +96,7 @@ public class Controller {
             Service.instance().create(model.getInstrumento(), e);
             model.setList(Service.instance().search(model.getInstrumento(), new Calibraciones()));
             model.commit();
-            //model.getInstrumento().getCalibraciones().add(e);
-            //this.search(model.getInstrumento(), new Calibraciones());
+
         }
     }
 
@@ -107,26 +106,12 @@ public class Controller {
         // Realiza la eliminación en el servicio (void)
         Service.instance().delete(model.getInstrumento(), e);
 
-        // Verifica si el elemento se ha eliminado correctamente en el modelo local
-        //if (model.getInstrumento().getCalibraciones().remove(e)) {
-        //updateNumerosSecuenciales();
+
         // Actualiza la vista con la lista modificada
         int[] cols = {TableModel.NUMERO, TableModel.FECHA, TableModel.MEDICIONES};
         view.getList().setModel(new TableModel(cols, model.getInstrumento().getCalibraciones()));
-        //actualizar numero
-        //model.getCurrent().disminuirCantidad();
-        //} else {
-        //  throw new Exception("Error al eliminar el elemento...");
-        //}
 
-    }
 
-    private void updateNumerosSecuenciales() {
-        List<Calibraciones> calibracionesList = model.getList();
-        for (int i = 0; i < calibracionesList.size(); i++) {
-            Calibraciones calibracion = calibracionesList.get(i);
-            calibracion.setNumero(i + 1); // Actualiza el número secuencial
-        }
     }
 
     public String shown() {
@@ -269,102 +254,5 @@ public class Controller {
         }
     }
 
-
-    /*
-    public void generatePdfReport() throws Exception {
-        Document document = new Document();
-
-        try {
-            List<Calibraciones> list = Service.instance().search2(model.getInstrumento(),new Calibraciones());          // con el search normal, no sirve ya que agrega a la lista si son ==, ocupamos uno que sea !=...
-            System.out.println("Número de elementos en list: " + list.size());
-
-            List<Mediciones> list2 = model.getInstrumento().getCalibraciones().stream().flatMap(calibracion -> calibracion.getMedicionesList().stream()).collect(Collectors.toList());
-            //List<Mediciones> list2 = list.stream().flatMap(calibracion -> calibracion.getMedicionesList().stream()).collect(Collectors.toList());
-            PdfWriter.getInstance(document, new FileOutputStream("reporteCalibraciones.pdf"));
-            document.open();
-
-            // Título del reporte
-            Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18);
-            Paragraph title = new Paragraph("Reporte de Instrumentos", titleFont);
-            title.setAlignment(Element.ALIGN_CENTER);
-            document.add(title);
-
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-
-            Image img = Image.getInstance("Instrumentos/src/main/resources/instrumentos/presentation/icons/LogoUNA.svg.png"); // Reemplaza con la ruta de tu imagen
-            img.setAlignment(Element.ALIGN_CENTER);
-            img.scaleToFit(300, 200); // Ajusta el tamaño de la imagen según tus necesidades
-            document.add(img);
-
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-
-            // Tabla de contenido
-            PdfPTable table = new PdfPTable(3); // 3 columnas
-            table.setWidthPercentage(100);
-            PdfPTable table2 = new PdfPTable(3); // 3 columnas
-            table.setWidthPercentage(50);
-
-            // Encabezados de la tabla
-            Font tableHeaderFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-
-            PdfPCell cell = new PdfPCell(new Phrase("Numero", tableHeaderFont));
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("Fecha", tableHeaderFont));
-            table.addCell(cell);
-            cell = new PdfPCell(new Phrase("Mediciones", tableHeaderFont));
-            table.addCell(cell);
-
-
-
-            PdfPCell cell2 = new PdfPCell(new Phrase("Medida", tableHeaderFont));
-            table2.addCell(cell2);
-            cell2 = new PdfPCell(new Phrase("Referencia", tableHeaderFont));
-            table2.addCell(cell2);
-            cell2 = new PdfPCell(new Phrase("Lectura", tableHeaderFont));
-            table2.addCell(cell2);
-
-
-
-            // Datos de la tabla
-            Font tableDataFont = FontFactory.getFont(FontFactory.HELVETICA);
-
-
-            list.forEach(calibracion -> {
-                PdfPCell cell = new PdfPCell(new Phrase("Numero", tableHeaderFont));
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("Fecha", tableHeaderFont));
-                table.addCell(cell);
-                cell = new PdfPCell(new Phrase("Mediciones", tableHeaderFont));
-                table.addCell(cell);
-                table.addCell(new Phrase(String.valueOf(calibracion.getNumero()), tableDataFont));
-                table.addCell(new Phrase(calibracion.getFecha(), tableDataFont));
-                table.addCell(new Phrase(String.valueOf(calibracion.getMediciones()), tableDataFont));
-                for (Mediciones medicion : calibracion.getMedicionesList()) {
-                    PdfPCell cell2 = new PdfPCell(new Phrase("Medida", tableHeaderFont));
-                    table2.addCell(cell2);
-                    cell2 = new PdfPCell(new Phrase("Referencia", tableHeaderFont));
-                    table2.addCell(cell2);
-                    cell2 = new PdfPCell(new Phrase("Lectura", tableHeaderFont));
-                    table2.addCell(cell2);
-                    table2.addCell(new Phrase(String.valueOf(medicion.getMedida()), tableDataFont));
-                    table2.addCell(new Phrase(String.valueOf(medicion.getReferencia()), tableDataFont));
-                    table2.addCell(new Phrase(String.valueOf(medicion.getLectura()), tableDataFont));
-                }
-            });
-
-            document.add(table);
-            document.add(table2);
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("Creadores: Anner Andrés Angulo Gutiérrez y Marcos Emilio Vásquez Díaz", tableDataFont));
-
-            document.close();
-        } catch (Exception e) {
-            throw new Exception("Error al generar el reporte");
-        }
-    }
-    */
 
 }

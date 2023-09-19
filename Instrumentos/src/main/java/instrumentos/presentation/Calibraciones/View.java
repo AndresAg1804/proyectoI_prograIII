@@ -106,9 +106,7 @@ public class View implements Observer {
                 String fechaActualFormateada = dateFormat.format(fechaActual);
                 fecha.setText(fechaActualFormateada);
                 Calibraciones filter = new Calibraciones(model.getInstrumento(),fecha.getText(),Integer.parseInt(mediciones.getText()));
-                //filter.setMediciones(Integer.parseInt(mediciones.getText()));
-                //filter.setFecha(fecha.getText());
-               // filter.setNumero(Integer.parseInt(numero.getText()));
+
                 try {
                     if(!isValid()){
                         throw new Exception("Campos vacios");
@@ -128,6 +126,7 @@ public class View implements Observer {
                 int row = list.getSelectedRow();
                 try {
                     controller.del(row);
+                    Medi.setVisible(false);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }

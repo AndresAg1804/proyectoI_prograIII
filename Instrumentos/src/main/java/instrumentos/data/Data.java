@@ -32,10 +32,6 @@ public class Data {
         instrumentos = new ArrayList<>();
         calibraciones = new ArrayList<>();
 
-        //tipos.add(new TipoInstrumento("TER","Termómetro","Grados Celcius") );
-        //tipos.add(new TipoInstrumento("BAR","Barómetro","PSI") );
-        //tipos.add(new TipoInstrumento("BAL","Balanza","Gramos") );
-        //tipos.add(new TipoInstrumento("VOL","Voltimetro","Voltios") );
     }
 
     public List<TipoInstrumento> getTipos() {
