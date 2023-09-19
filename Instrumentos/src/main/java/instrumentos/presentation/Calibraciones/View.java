@@ -106,7 +106,7 @@ public class View implements Observer {
                 Date fechaActual = new Date();
                 String fechaActualFormateada = dateFormat.format(fechaActual);
                 fecha.setText(fechaActualFormateada);
-                Calibraciones filter = new Calibraciones(model.getInstrumento(),fecha.getText(),Integer.parseInt(mediciones.getText()));
+                Calibraciones filter = new Calibraciones(model.getCurrent().getInstrumento(),fecha.getText(),Integer.parseInt(mediciones.getText()));
 
                 try {
                     if(!isValid()){
@@ -118,7 +118,6 @@ public class View implements Observer {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-                clearTextFields();
             }
         });
         delete.addMouseListener(new MouseAdapter() {

@@ -88,6 +88,7 @@ public class View implements Observer {
                 filter.setSerie(serie.getText());
 
                 try {
+
                     filter.setMinimo(Integer.parseInt(minimo.getText()));
                     filter.setMaximo(Integer.parseInt(maximo.getText()));
                     filter.setTolerancia(Integer.parseInt(tolerancia.getText()));
@@ -95,11 +96,13 @@ public class View implements Observer {
                     if(!isValid()){
                         throw new Exception("Campos vacios");
                     }
+                    if(filter.getMaximo() <= filter.getMinimo()){
+                        throw new Exception("Min es mayor o igual a Max");
+                    }
                     controller.save(filter);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-                clearTextFields();
             }
         });
         delete.addMouseListener(new MouseAdapter() {

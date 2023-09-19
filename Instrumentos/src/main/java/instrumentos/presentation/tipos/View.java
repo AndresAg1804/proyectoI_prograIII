@@ -74,7 +74,6 @@ public class View implements Observer {
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
-                clearTextFields();
             }
         });
         delete.addMouseListener(new MouseAdapter() {
