@@ -46,6 +46,7 @@ public class View implements Observer {
         panel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentShown(ComponentEvent e) {
+                //model.setInstrumento(model.getCurrent().getInstrumento());
                 instruField.setForeground(Color.RED);
                 instruField.setText(controller.shown());
                 numero.setEnabled(false);
@@ -215,7 +216,7 @@ public class View implements Observer {
 
         if ((changedProps & Model.LIST) == Model.LIST) {
             int[] cols = {TableModel.NUMERO, TableModel.FECHA, TableModel.MEDICIONES};
-            list.setModel(new TableModel(cols, model.getInstrumento().getCalibraciones()));
+            list.setModel(new TableModel(cols, model.getCurrent().getInstrumento().getCalibraciones()));
             list.setRowHeight(30);
             TableColumnModel columnModel = list.getColumnModel();
             columnModel.getColumn(2).setPreferredWidth(200);

@@ -37,7 +37,7 @@ public class Controller{
 
     public void edit(int row) throws Exception{
         Instrumento e = model.getList().get(row);
-        Calibraciones.setInstrumento(e);
+        Application.CalibracionesController.setInstrumento(e);
         model.setCurrent(Service.instance().read(e));
         model.commit();
     }

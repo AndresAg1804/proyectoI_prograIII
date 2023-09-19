@@ -15,7 +15,7 @@ public class Calibraciones {
     }
 
     List<Mediciones> medicionesList = new ArrayList<>();
-    static Instrumento instrumento;
+    Instrumento instrumento;
 
     String fecha;
 
@@ -60,11 +60,16 @@ public class Calibraciones {
 
     }
 
-    public static Instrumento getInstrumento() {
+    public Instrumento getInstrumento() {
         return instrumento;
     }
 
-    public static void setInstrumento(Instrumento instrumen) {
+    public void setInstrumento(Instrumento instrumen) {
+        if(instrumen.getSerie().equals(instrumento.getSerie())){
+            instrumen.setCalibraciones(instrumento.getCalibraciones());
+            instrumento = instrumen;
+            return;
+        }
         instrumento = instrumen;
     }
 

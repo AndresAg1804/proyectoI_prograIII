@@ -118,7 +118,7 @@ public class View implements Observer {
         clear.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Calibraciones.setInstrumento(new Instrumento());
+                Application.CalibracionesController.setInstrumento(new Instrumento());
                 clearTextFields();
             }
         });

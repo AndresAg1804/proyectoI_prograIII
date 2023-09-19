@@ -115,13 +115,13 @@ public class Controller {
     }
 
     public String shown() {
-        model.setInstrumento(Calibraciones.getInstrumento());
+        //model.setInstrumento();
 
         String textoInstrumento;
-        List<Calibraciones> calibracionesDelInstrumento = model.getInstrumento().getCalibraciones();
+        List<Calibraciones> calibracionesDelInstrumento = model.getCurrent().getInstrumento().getCalibraciones();
 
-        if (!model.getInstrumento().getSerie().isEmpty()) {
-            textoInstrumento = model.getInstrumento().getSerie() + " - " + model.getInstrumento().getDescripcion() + "(" + model.getInstrumento().getMinimo() + "-" + model.getInstrumento().getMaximo() + " Grados Celsius)";
+        if (!model.getCurrent().getInstrumento().getSerie().isEmpty()) {
+            textoInstrumento = model.getCurrent().getInstrumento().getSerie() + " - " + model.getCurrent().getInstrumento().getDescripcion() + "(" + model.getCurrent().getInstrumento().getMinimo() + "-" + model.getCurrent().getInstrumento().getMaximo() + " Grados Celsius)";
         } else {
             textoInstrumento = "Ningún instrumento seleccionado.";
             calibracionesDelInstrumento = new ArrayList<>(); // Crea una lista vacía
@@ -135,7 +135,7 @@ public class Controller {
     }
 
     public void clear() {
-        model.setCurrent(new Calibraciones());
+        //model.setCurrent(new Calibraciones());
         model.setMode(Application.MODE_CREATE);
         model.commit();
     }
@@ -255,4 +255,8 @@ public class Controller {
     }
 
 
+    public void setInstrumento(Instrumento e) {
+        model.getCurrent().setInstrumento(e);
+        model.commit();
+    }
 }
