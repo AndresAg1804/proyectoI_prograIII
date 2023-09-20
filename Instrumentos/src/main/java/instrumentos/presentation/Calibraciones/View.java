@@ -109,12 +109,14 @@ public class View implements Observer {
                 Calibraciones filter = new Calibraciones(model.getCurrent().getInstrumento(),fecha.getText(),Integer.parseInt(mediciones.getText()));
 
                 try {
-                    if(!isValid()){
+                    if(isValid()){
+                        controller.save(filter);
+                        clearTextFields();
+                        Medi.setVisible(false);
+                    }
+                    else{
                         throw new Exception("Campos vacios");
                     }
-                    controller.save(filter);
-                    clearTextFields();
-                    Medi.setVisible(false);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -172,7 +174,7 @@ public class View implements Observer {
                 Object cellValue = list2.getValueAt(row, column);
 
                 if (cellValue != null) {
-                    me.setLectura(cellValue.toString());
+                    me.setLectura((Integer) cellValue);
                     try {
                         controller.edit2(row, me);
                     } catch (Exception ex) {

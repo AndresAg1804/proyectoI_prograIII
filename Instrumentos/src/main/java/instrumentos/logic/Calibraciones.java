@@ -51,13 +51,13 @@ public class Calibraciones {
                     Mediciones med = new Mediciones();
                     med.setMedida(String.valueOf(1));
                     med.setReferencia("0");
-                    med.setLectura("0");
+                    med.setLectura(0);
                     medicionesList.add(med);
                 } else {
                     Mediciones med = new Mediciones();
                     med.setMedida(String.valueOf(i));
                     med.setReferencia(String.valueOf(refValor2));
-                    med.setLectura("0");
+                    med.setLectura(0);
                     medicionesList.add(med);
                     refValor2 += refValor2;
                 }

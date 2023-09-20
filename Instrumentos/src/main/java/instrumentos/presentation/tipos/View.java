@@ -67,10 +67,13 @@ public class View implements Observer {
                 filter.setCodigo(codigo.getText());
                 filter.setUnidad(unidad.getText());
                 try {
-                    if(!isValid()){
+                    if(isValid()){
+                        controller.save(filter);
+                        clearTextFields();
+                    }
+                    else{
                         throw new Exception("Campos vacios");
                     }
-                    controller.save(filter);
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }

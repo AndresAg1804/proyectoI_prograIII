@@ -93,13 +93,17 @@ public class View implements Observer {
                     filter.setMaximo(Integer.parseInt(maximo.getText()));
                     filter.setTolerancia(Integer.parseInt(tolerancia.getText()));
                     filter.setTipo((TipoInstrumento) tipo.getSelectedItem());
-                    if(!isValid()){
-                        throw new Exception("Campos vacios");
-                    }
                     if(filter.getMaximo() <= filter.getMinimo()){
                         throw new Exception("Min es mayor o igual a Max");
                     }
-                    controller.save(filter);
+                    if(isValid()){
+                        controller.save(filter);
+                        clearTextFields();
+                    }
+                    else{
+                        throw new Exception("Campos vacios");
+                    }
+
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);
                 }

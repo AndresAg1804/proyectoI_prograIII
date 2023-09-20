@@ -14,7 +14,7 @@ public class Mediciones {
 
     String Referencia;
 
-    String Lectura;
+    int Lectura;
 
 
     public String getMedida() {
@@ -33,19 +33,19 @@ public class Mediciones {
         Referencia = referencia;
     }
 
-    public String getLectura() {
+    public int getLectura() {
         return Lectura;
     }
 
-    public void setLectura(String lectura) {
+    public void setLectura(int lectura) {
         Lectura = lectura;
     }
 
     public Mediciones() {
-        this("", "", "");
+        this("", "", 0);
     }
 
-    public Mediciones(String me, String re, String lec){
+    public Mediciones(String me, String re, int lec){
         this.Medida = me;
         this.Referencia = re;
         this.Lectura = lec;

@@ -45,9 +45,10 @@ public class TableModelMediciones extends AbstractTableModel implements javax.sw
 
 
     public void setValueAt(Object value, int rowIndex, int columIndex){
+        String valor = (String) value;
         Mediciones e = rows.get(rowIndex);
         switch (cols[columIndex]){
-            case LECTURA: e.setLectura((String)value); break;
+            case LECTURA: e.setLectura(Integer.parseInt(valor)); break;
         }
     }
 
