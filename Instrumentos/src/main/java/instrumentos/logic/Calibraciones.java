@@ -16,7 +16,7 @@ public class Calibraciones {
 
     int mediciones;
 
-    //@XmlIDREF
+    @XmlIDREF
     Instrumento instrumento;
 
     @XmlIDREF
