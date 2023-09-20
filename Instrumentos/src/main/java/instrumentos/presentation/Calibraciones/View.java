@@ -69,11 +69,11 @@ public class View implements Observer {
                     Calibraciones filter = new Calibraciones();
                     if (!searchNumero.getText().isEmpty()) {
                         // Si el campo no está vacío, llamar a controller.search con el instrumento y el filtro
-                        filter.setNumero(String.valueOf(Integer.parseInt(searchNumero.getText())));
-                        controller.search(model.getInstrumento(), filter);
+                        filter.setNumero(searchNumero.getText());
+                        controller.search(model.getCurrent().getInstrumento(), filter);
                     } else {
                         // Si el campo está vacío, llamar a controller.search solo con el instrumento
-                        controller.search(model.getInstrumento(), null);
+                        controller.search(model.getCurrent().getInstrumento(), null);
                     }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(panel, ex.getMessage(), "Información", JOptionPane.INFORMATION_MESSAGE);

@@ -153,7 +153,7 @@ public class Service {
             return ins.getCalibraciones();
         }
         return instru.getCalibraciones().stream()
-                .filter(i->i.getNumero()==(e.getNumero()))
+                .filter(i->i.getNumero().equals(e.getNumero()))
                 .sorted(Comparator.comparing(Calibraciones::getNumero))
                 .collect(Collectors.toList());
     }

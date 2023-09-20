@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?><data><tipos><tipo><codigo>BAR</codigo><nombre>Barómetro</nombre><unidad>PSI</unidad></tipo></tipos><instrumentos><serie>1111</serie><descripcion>aaaaa</descripcion><minimo>0</minimo><maximo>90</maximo><tolerancia>1</tolerancia><tipo>BAR</tipo><Calibraciones><Calibracion>1</Calibracion></Calibraciones></instrumentos></data>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><data><tipos/></data>

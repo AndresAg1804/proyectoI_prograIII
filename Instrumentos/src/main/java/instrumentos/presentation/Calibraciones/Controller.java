@@ -146,7 +146,7 @@ public class Controller {
         Document document = new Document();
 
         try {
-            List<Calibraciones> list = Service.instance().search2(model.getInstrumento(), new Calibraciones());
+            List<Calibraciones> list = Service.instance().search2(model.getCurrent().getInstrumento(), new Calibraciones());
             System.out.println("Número de elementos en list: " + list.size());
 
             PdfWriter.getInstance(document, new FileOutputStream("reporteCalibraciones.pdf"));
