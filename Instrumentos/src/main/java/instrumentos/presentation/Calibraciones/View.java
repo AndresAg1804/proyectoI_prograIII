@@ -141,6 +141,7 @@ public class View implements Observer {
             public void mouseClicked(MouseEvent e) {
                 clearTextFields();
                 Medi.setVisible(false);
+                mediciones.setText(null);
                 fecha.setEnabled(true);
                 mediciones.setEnabled(true);
             }
