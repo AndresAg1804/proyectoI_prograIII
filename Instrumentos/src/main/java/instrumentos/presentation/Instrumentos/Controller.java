@@ -16,8 +16,9 @@ public class Controller{
     Model model;
 
     public Controller(View view, Model model) {
-
-        model.init(Service.instance().search(new Instrumento()));
+        try {
+            model.init(Service.instance().search(new Instrumento()));
+        }catch(Exception e){}
         this.view = view;
         this.model = model;
         view.setController(this);
