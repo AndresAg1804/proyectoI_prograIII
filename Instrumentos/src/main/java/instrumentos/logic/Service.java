@@ -2,7 +2,7 @@ package instrumentos.logic;
 
 import instrumentos.data.Data;
 import instrumentos.data.XmlPersister;
-
+import instrumentos.data.TipoInstrumentoDao;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -17,10 +17,12 @@ public class Service {
         return theInstance;
     }
     private Data data;
+    private TipoInstrumentoDao tipoInstrumentoDao;
 
     private Service(){
         try{
             data = XmlPersister.instance().load();
+            tipoInstrumentoDao = new TipoInstrumentoDao();
         }
         catch (Exception e){
             data = new Data();
@@ -37,40 +39,24 @@ public class Service {
     }
 
     //================= TIPOS DE INSTRUMENTO ============
-    public void create(TipoInstrumento e) throws Exception{
-        TipoInstrumento result = data.getTipos().stream()
-                .filter(i->i.getCodigo().equals(e.getCodigo())).findFirst().orElse(null);
-        if (result==null) data.getTipos().add(e);
-        else throw new Exception("Tipo ya existe");
+    public void create(TipoInstrumento e)throws Exception{
+        tipoInstrumentoDao.create(e);
     }
 
     public TipoInstrumento read(TipoInstrumento e) throws Exception{
-        TipoInstrumento result = data.getTipos().stream()
-                .filter(i->i.getCodigo().equals(e.getCodigo())).findFirst().orElse(null);
-        if (result!=null) return result;
-        else throw new Exception("Tipo no existe");
+        return tipoInstrumentoDao.read(e.getCodigo());
     }
 
-    public void update(TipoInstrumento e) throws Exception{
-        TipoInstrumento result = null;
-        try{
-            result = this.read(e);
-            data.getTipos().remove(result);
-            data.getTipos().add(e);
-        }catch (Exception ex) {
-            throw new Exception("Tipo no existe");
-        }
+    public void update(TipoInstrumento e)throws Exception{
+        tipoInstrumentoDao.update(e);
     }
 
-    public void delete(TipoInstrumento e) throws Exception{
-        data.getTipos().remove(e);
-     }
+    public void delete(TipoInstrumento e)throws Exception{
+        tipoInstrumentoDao.delete(e);
+    }
 
-    public List<TipoInstrumento> search(TipoInstrumento e){
-        return data.getTipos().stream()
-                .filter(i->i.getNombre().contains(e.getNombre()))
-                .sorted(Comparator.comparing(TipoInstrumento::getNombre))
-                .collect(Collectors.toList());
+    public List<TipoInstrumento> search(TipoInstrumento e) throws Exception {
+        return tipoInstrumentoDao.search(e);
     }
 
     //================= INSTRUMENTOS ============

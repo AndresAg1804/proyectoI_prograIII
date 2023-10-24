@@ -16,12 +16,16 @@ public class Controller{
     Model model;
 
     public Controller(View view, Model model) {
+
         model.init(Service.instance().search(new Instrumento()));
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
-        model.setListTypes(Service.instance().search(new TipoInstrumento()));
+        try{
+            model.setListTypes(Service.instance().search(new TipoInstrumento()));
+        }catch(Exception e){}
+
         model.commit();
     }
 
@@ -79,7 +83,10 @@ public class Controller{
         model.commit();
     }
     public void shown(){
-        model.setListTypes(Service.instance().search(new TipoInstrumento()));
+        try {
+            model.setListTypes(Service.instance().search(new TipoInstrumento()));
+        } catch (Exception e) {
+        }
         model.commit();
     }
 
