@@ -20,7 +20,10 @@ public class Controller {
     public Controller(View view, Model model) {
         this.view = view;
         this.model = model;
-        model.init(Service.instance().search(model.getInstrumento(), new Calibraciones()));
+        model.setCurrent(new Calibraciones());
+        try {
+            model.init(Service.instance().search(new Calibraciones()));
+        } catch (Exception e) {}
         this.shown();
         view.setController(this);
         view.setModel(model);
@@ -38,7 +41,7 @@ public class Controller {
             return;
         }
 
-        List<Calibraciones> rows = Service.instance().search(instru, filter);
+        List<Calibraciones> rows = Service.instance().search(filter);
 
         if (existentes.isEmpty()&&filter!=null) {
             model.setList(rows);
@@ -95,8 +98,8 @@ public class Controller {
             throw new Exception("No hay instrumento seleccionado");
         }
         if (model.getMode() == 1) {
-            Service.instance().create(model.getCurrent().getInstrumento(), e);
-            model.setList(Service.instance().search(model.getCurrent().getInstrumento(), new Calibraciones()));
+            Service.instance().create(e);
+            model.setList(Service.instance().search(new Calibraciones()));
             model.commit();
 
         }
@@ -106,7 +109,7 @@ public class Controller {
 
         Calibraciones e = model.getInstrumento().getCalibraciones().get(row);
         // Realiza la eliminación en el servicio (void)
-        Service.instance().delete(model.getInstrumento(), e);
+        Service.instance().delete(e);
 
 
         // Actualiza la vista con la lista modificada
@@ -120,6 +123,7 @@ public class Controller {
         //model.setInstrumento();
 
         String textoInstrumento;
+
         List<Calibraciones> calibracionesDelInstrumento = model.getCurrent().getInstrumento().getCalibraciones();
 
         if (!model.getCurrent().getInstrumento().getSerie().isEmpty()) {
@@ -146,7 +150,7 @@ public class Controller {
         Document document = new Document();
 
         try {
-            List<Calibraciones> list = Service.instance().search2(model.getCurrent().getInstrumento(), new Calibraciones());
+            List<Calibraciones> list = Service.instance().search(new Calibraciones());
             System.out.println("Número de elementos en list: " + list.size());
 
             PdfWriter.getInstance(document, new FileOutputStream("reporteCalibraciones.pdf"));

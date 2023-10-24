@@ -21,5 +21,22 @@ create table Instrumento(
        Primary Key (serie)         
      );
      
+CREATE TABLE Calibraciones (
+    id int AUTO_INCREMENT not null,  /* provoca que no tengamos que ponerlo en values */
+    fecha DATE not null,   /* formato de fecha */
+    mediciones int,
+    instrumento_serie varchar(10) not null,
+    Primary Key (id)
+);
+
+CREATE TABLE Mediciones (
+     medida varchar(10) not null,
+     referencia varchar(10) not null,
+     lectura varchar (10) not null,
+     calibracion_id int,
+     Primary Key (medida)
+);
 ALTER TABLE Instrumento ADD Foreign Key (tipo) REFERENCES TipoInstrumento(codigo);
+Alter TABLE Calibraciones ADD Foreign key (instrumento_serie) REFERENCES Instrumento(serie);
+Alter TABLE Mediciones ADD Foreign Key (calibracion_id) REFERENCES Calibraciones(id);
      

@@ -1,27 +1,34 @@
 package instrumentos.presentation.Instrumentos;
 
+import instrumentos.Application;
 import instrumentos.logic.Instrumento;
 import instrumentos.logic.TipoInstrumento;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observer;
 
 public class Model extends java.util.Observable{
     List<Instrumento> list;
     Instrumento current;
-
-    List<TipoInstrumento> listTypes;
+    Instrumento filter;
     int mode;
+    int props;
+    List<TipoInstrumento> listTypes;
 
-    public int getMode() {
-        return mode;
+    public Model() {
     }
 
-    public void setMode(int mode) {
-        this.mode = mode;
-    }
+    public void init(List<TipoInstrumento> listTypes){
+        props=0;
+        filter = new Instrumento();
+        List<Instrumento> rows = new ArrayList<Instrumento>();
+        this.setList(rows);
+        mode= Application.MODE_CREATE;
 
-    int changedProps = NONE;
+        this.setListTypes(listTypes);
+    }
 
     @Override
     public void addObserver(Observer o) {
@@ -31,20 +38,35 @@ public class Model extends java.util.Observable{
 
     public void commit(){
         setChanged();
-        notifyObservers(changedProps);
-        changedProps = NONE;
+        notifyObservers(props);
+        props=0;
     }
 
-    public Model() {
+    public Instrumento getFilter() {
+        return filter;
     }
 
-    public void init(List<Instrumento> list){
-        setList(list);
-        setCurrent(new Instrumento());
+    public void setFilter(Instrumento filter) {
+        this.filter = filter;
     }
 
     public List<Instrumento> getList() {
         return list;
+    }
+
+    public void setList(List<Instrumento> list){
+        this.list = list;
+        props+=LIST;
+        setCurrent(new Instrumento());
+    }
+
+    public Instrumento getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Instrumento current) {
+        props+=CURRENT;
+        this.current = current;
     }
 
     public List<TipoInstrumento> getListTypes() {
@@ -53,25 +75,18 @@ public class Model extends java.util.Observable{
 
     public void setListTypes(List<TipoInstrumento> listTypes) {
         this.listTypes = listTypes;
-        changedProps += TYPES;
+        props+=TYPES;
     }
 
-    public void setList(List<Instrumento> list){
-        this.list = list;
-        changedProps +=LIST;
+    public int getMode() {
+        return mode;
     }
 
-    public Instrumento getCurrent() {
-        return current;
-    }
-    public void setCurrent(Instrumento current) {
-        changedProps +=CURRENT;
-        this.current = current;
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
-    public static int NONE=0;
     public static int LIST=1;
     public static int CURRENT=2;
-
-    public static  int TYPES=4;
+    public static int TYPES=4;
 }

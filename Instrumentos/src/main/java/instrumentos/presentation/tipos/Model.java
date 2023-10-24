@@ -10,18 +10,38 @@ import java.util.Observer;
 public class Model extends java.util.Observable{
     List<TipoInstrumento> list;
     TipoInstrumento current;
-
+    TipoInstrumento filter;
     int mode;
+    int props;
 
-    public int getMode() {
-        return mode;
+    public Model() {
     }
 
-    public void setMode(int mode) {
-        this.mode = mode;
+    public void init(){
+        props=0;
+        filter = new TipoInstrumento();
+        List<TipoInstrumento> list = new ArrayList<TipoInstrumento>();
+        this.setList(list);
+        mode= Application.MODE_CREATE;
     }
 
-    int changedProps = NONE;
+    public void setList(List<TipoInstrumento> list){
+        this.list = list;
+        props+=LIST;
+        setCurrent(new TipoInstrumento());
+    }
+
+    public TipoInstrumento getFilter() {
+        return filter;
+    }
+
+    public void setFilter(TipoInstrumento filter) {
+        this.filter = filter;
+    }
+
+    public List<TipoInstrumento> getList() {
+        return list;
+    }
 
     @Override
     public void addObserver(Observer o) {
@@ -31,35 +51,27 @@ public class Model extends java.util.Observable{
 
     public void commit(){
         setChanged();
-        notifyObservers(changedProps);
-        changedProps = NONE;
+        notifyObservers(props);
+        props=0;
     }
 
-    public Model() {
+    public int getMode() {
+        return mode;
     }
 
-    public void init(List<TipoInstrumento> list){
-        setList(list);
-        setCurrent(new TipoInstrumento());
-    }
-
-    public List<TipoInstrumento> getList() {
-        return list;
-    }
-    public void setList(List<TipoInstrumento> list){
-        this.list = list;
-        changedProps +=LIST;
+    public void setMode(int mode) {
+        this.mode = mode;
     }
 
     public TipoInstrumento getCurrent() {
         return current;
     }
+
     public void setCurrent(TipoInstrumento current) {
-        changedProps +=CURRENT;
+        props+=CURRENT;
         this.current = current;
     }
 
-    public static int NONE=0;
     public static int LIST=1;
     public static int CURRENT=2;
 }

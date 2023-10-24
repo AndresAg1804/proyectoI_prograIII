@@ -1,15 +1,16 @@
 package instrumentos.presentation.Instrumentos;
 
 import instrumentos.Application;
-import instrumentos.logic.Calibraciones;
-import instrumentos.logic.Service;
 import instrumentos.logic.Instrumento;
+import instrumentos.logic.Service;
 import instrumentos.logic.TipoInstrumento;
+
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
-import java.io.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.io.*;
 
 public class Controller{
     View view;
@@ -17,45 +18,66 @@ public class Controller{
 
     public Controller(View view, Model model) {
         try {
-            model.init(Service.instance().search(new Instrumento()));
-        }catch(Exception e){}
+            model.init(Service.instance().search(new TipoInstrumento()));
+        } catch (Exception e) {
+        }
         this.view = view;
         this.model = model;
         view.setController(this);
         view.setModel(model);
-        try{
-            model.setListTypes(Service.instance().search(new TipoInstrumento()));
-        }catch(Exception e){}
-
+        try {
+            model.setList(Service.instance().search(model.getFilter()));
+        } catch (Exception e) {
+        }
         model.commit();
     }
 
     public void search(Instrumento filter) throws  Exception{
-        List<Instrumento> rows = Service.instance().search(filter);
+        model.setFilter(filter);
+        List<Instrumento> rows = Service.instance().search(model.getFilter());
         if (rows.isEmpty()){
             throw new Exception("NINGUN REGISTRO COINCIDE");
         }
         model.setList(rows);
-        model.setCurrent(rows.get(0));
+        model.setMode(Application.MODE_CREATE);
         model.commit();
     }
 
-    public void edit(int row) throws Exception{
+    public void save(Instrumento e) throws  Exception{
+        switch (model.getMode()) {
+            case Application.MODE_CREATE:
+                Service.instance().create(e);
+                break;
+            case Application.MODE_EDIT:
+                Service.instance().update(e);
+                break;
+        }
+        model.setFilter(new Instrumento());
+        search(model.getFilter());
+    }
+
+    public void edit(int row){
         Instrumento e = model.getList().get(row);
-        Application.CalibracionesController.setInstrumento(e);
-        model.setCurrent(Service.instance().read(e));
+        try {
+            Application.CalibracionesController.setInstrumento(e);
+            model.setCurrent(Service.instance().read(e));
+            model.setMode(Application.MODE_EDIT);
+            model.commit();
+        } catch (Exception ex) {}
+    }
+
+    public void clear() {
+        model.setCurrent(new Instrumento());
+        model.setMode(Application.MODE_CREATE);
         model.commit();
     }
 
-    public void save(Instrumento e) throws Exception {
-        if (model.mode == 1) {
-            Service.instance().create(e);
-            this.search(new Instrumento());
+    public void shown() {
+        try {
+            model.setListTypes(Service.instance().search(new TipoInstrumento()));
+        } catch (Exception e) {
         }
-        if(model.mode==2) {
-            Service.instance().update(e);
-            this.search(new Instrumento());
-        }
+        model.commit();
     }
 
     public void del(int row) throws Exception{
@@ -77,18 +99,6 @@ public class Controller{
             throw new Exception("No se puede eliminar el instrumento porque tiene calibraciones asociadas");
         }
 
-    }
-    public void clear(){
-        model.setCurrent(new Instrumento());
-        model.setMode(Application.MODE_CREATE);
-        model.commit();
-    }
-    public void shown(){
-        try {
-            model.setListTypes(Service.instance().search(new TipoInstrumento()));
-        } catch (Exception e) {
-        }
-        model.commit();
     }
 
     public void generatePdfReport() throws Exception {

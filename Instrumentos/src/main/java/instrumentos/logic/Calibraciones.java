@@ -6,22 +6,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.List;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Calibraciones {
 
-    @XmlID
     String numero;
 
     String fecha;
 
     int mediciones;
 
-    @XmlIDREF
     Instrumento instrumento;
 
-    @XmlIDREF
-    @XmlElementWrapper(name = "Mediciones")
-    @XmlElement(name = "Medicion")
     List<Mediciones> medicionesList = new ArrayList<>();
 
     public Calibraciones() {
@@ -52,12 +46,14 @@ public class Calibraciones {
                     med.setMedida(String.valueOf(1));
                     med.setReferencia("0");
                     med.setLectura(0);
+                    med.setCalibraciones(this);
                     medicionesList.add(med);
                 } else {
                     Mediciones med = new Mediciones();
                     med.setMedida(String.valueOf(i));
                     med.setReferencia(String.valueOf(refValor2));
                     med.setLectura(0);
+                    med.setCalibraciones(this);
                     medicionesList.add(med);
                     refValor2 += refValor2;
                 }

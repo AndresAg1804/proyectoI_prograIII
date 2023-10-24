@@ -6,16 +6,23 @@ import jakarta.xml.bind.annotation.XmlID;
 
 import java.util.Objects;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Mediciones {
 
-    @XmlID
     String Medida;
 
     String Referencia;
 
     int Lectura;
 
+    Calibraciones calibraciones;
+
+    public Calibraciones getCalibraciones() {
+        return calibraciones;
+    }
+
+    public void setCalibraciones(Calibraciones calibraciones) {
+        this.calibraciones = calibraciones;
+    }
 
     public String getMedida() {
         return Medida;

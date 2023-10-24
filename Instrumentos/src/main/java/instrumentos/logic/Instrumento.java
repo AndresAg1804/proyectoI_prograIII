@@ -11,20 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Instrumento {
 
-    @XmlID
     String serie;
     String descripcion;
     int minimo;
     int maximo;
     int tolerancia;
-    @XmlIDREF
     TipoInstrumento tipo;
-    @XmlIDREF
-    @XmlElementWrapper(name = "Calibraciones")
-    @XmlElement(name = "Calibracion")
     List<Calibraciones> calibraciones = new ArrayList<>();
 
     public List<Calibraciones> getCalibraciones() {

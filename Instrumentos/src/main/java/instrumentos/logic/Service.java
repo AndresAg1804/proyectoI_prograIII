@@ -1,43 +1,38 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package instrumentos.logic;
 
-import instrumentos.data.Data;
-import instrumentos.data.XmlPersister;
+import instrumentos.data.CalibracionesDao;
 import instrumentos.data.TipoInstrumentoDao;
 import instrumentos.data.InstrumentoDao;
-import java.util.Comparator;
+import instrumentos.data.MedicionesDao;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 
 public class Service {
     private static Service theInstance;
-
     public static Service instance(){
-        if (theInstance == null) theInstance = new Service();
+        if (theInstance==null){
+            theInstance=new Service();
+        }
         return theInstance;
     }
-    private Data data;
+
     private TipoInstrumentoDao tipoInstrumentoDao;
     private InstrumentoDao instrumentoDao;
+    private CalibracionesDao calibracionesDao;
+    private MedicionesDao medicionesDao;
 
-    private Service(){
+    public Service() {
         try{
-            data = XmlPersister.instance().load();
             tipoInstrumentoDao = new TipoInstrumentoDao();
             instrumentoDao = new InstrumentoDao();
+            calibracionesDao = new CalibracionesDao();
+            medicionesDao = new MedicionesDao();
         }
-        catch (Exception e){
-            data = new Data();
-        }
-
-    }
-
-    public void stop(){
-        try{
-            XmlPersister.instance().store(data);
-        }catch(Exception e){
-            System.out.println(e);
+        catch(Exception e){
         }
     }
 
@@ -63,6 +58,7 @@ public class Service {
     }
 
     // ------------ INSTRUMENTOS -------------
+
     public void create(Instrumento e) throws Exception{
         instrumentoDao.create(e);
     }
@@ -85,57 +81,23 @@ public class Service {
 
     //================= Calibraciones ============
 
-    public void create(Instrumento instru, Calibraciones e) throws Exception {
-        int num;
-        num=instru.getCalibraciones().size()+1;
-        e.setNumero(String.valueOf(num));
-        instru.getCalibraciones().add(e);
-
+    public void create(Calibraciones e) throws Exception{
+        calibracionesDao.create(e);
     }
 
-    public Calibraciones read(Instrumento instru, Calibraciones e) throws Exception{
-        Calibraciones result = instru.getCalibraciones().stream()
-                .filter(i->i.getNumero()==(e.getNumero())).findFirst().orElse(null);
-        if (result!=null) return result;
-        else throw new Exception("Tipo no existe");
+    public Calibraciones read(Calibraciones e) throws Exception{
+        return calibracionesDao.read(e.getNumero());
     }
 
-    public void update(Instrumento instru, Calibraciones e) throws Exception{
-        Calibraciones result = null;
-        try{
-            result = this.read(instru, e);
-            instru.getCalibraciones().remove(result);
-            instru.getCalibraciones().add(e);
-        }catch (Exception ex) {
-            throw new Exception("Tipo no existe");
-        }
+    public void update(Calibraciones e)throws Exception{
+        calibracionesDao.update(e);
     }
 
-    public void delete(Instrumento instr, Calibraciones e) throws Exception{
-        instr.getCalibraciones().remove(e);
+    public void delete(Calibraciones e)throws Exception{
+        calibracionesDao.delete(e);
     }
 
-    public List<Calibraciones> search(Instrumento instru, Calibraciones e){
-        if(instru == null){
-            Instrumento ins = new Instrumento();
-            return ins.getCalibraciones();
-        }
-        return instru.getCalibraciones().stream()
-                .filter(i->i.getNumero().equals(e.getNumero()))
-                .sorted(Comparator.comparing(Calibraciones::getNumero))
-                .collect(Collectors.toList());
+    public List<Calibraciones> search(Calibraciones v) throws Exception {
+        return calibracionesDao.search(v);
     }
-
-    public List<Calibraciones> search2(Instrumento instru, Calibraciones e){
-        if(instru == null){
-            Instrumento ins = new Instrumento();
-            return ins.getCalibraciones();
-        }
-        return instru.getCalibraciones().stream()
-                .filter(i->i.getNumero()!=(e.getNumero()))
-                .sorted(Comparator.comparing(Calibraciones::getNumero))
-                .collect(Collectors.toList());
-    }
-
-
 }
