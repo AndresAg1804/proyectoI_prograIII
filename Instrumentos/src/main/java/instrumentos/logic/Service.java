@@ -9,6 +9,8 @@ import instrumentos.data.CalibracionesDao;
 import instrumentos.data.TipoInstrumentoDao;
 import instrumentos.data.InstrumentoDao;
 import instrumentos.data.MedicionesDao;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Service {
@@ -19,7 +21,6 @@ public class Service {
         }
         return theInstance;
     }
-
     private TipoInstrumentoDao tipoInstrumentoDao;
     private InstrumentoDao instrumentoDao;
     private CalibracionesDao calibracionesDao;
@@ -31,6 +32,7 @@ public class Service {
             instrumentoDao = new InstrumentoDao();
             calibracionesDao = new CalibracionesDao();
             medicionesDao = new MedicionesDao();
+            //calibra = new ArrayList<>();
         }
         catch(Exception e){
         }
@@ -129,5 +131,20 @@ public class Service {
 
     public List<Mediciones> search(Mediciones v) throws Exception {
         return medicionesDao.search(v);
+    }
+
+    public List<Mediciones> searchMedicionesByCalibracion(String id){
+        List<Mediciones> med = new ArrayList<>();
+        med = medicionesDao.searchMedicionesByCalibracion(id);
+        return med;
+    }
+
+    public List<Calibraciones> searchCalibracionesByInstrumento(String serie){
+        List<Calibraciones> cali = new ArrayList<>();
+        cali = calibracionesDao.searchCalibracionesByInstrumento(serie);
+        for(Calibraciones c : cali){
+            c.setMedicionesList(searchMedicionesByCalibracion(c.getNumero()));
+        }
+        return cali;
     }
 }

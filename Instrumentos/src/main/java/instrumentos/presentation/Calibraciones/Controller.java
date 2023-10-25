@@ -31,7 +31,7 @@ public class Controller {
 
     public void search(Instrumento instru, Calibraciones filter) throws Exception {
 
-        List<Calibraciones> existentes = instru.getCalibraciones();
+        List<Calibraciones> existentes = Service.instance().searchCalibracionesByInstrumento(instru.getSerie());
 
         if(filter==null){
             instru.setCalibraciones(existentes);
@@ -108,6 +108,14 @@ public class Controller {
             model.commit();
 
         }
+        else {
+            Service.instance().update(model.getCurrent());
+            for(Mediciones med : model.getCurrent().getMedicionesList()){
+                Service.instance().update(med);
+            }
+            model.setList(Service.instance().search(new Calibraciones()));
+            model.commit();
+        }
     }
 
     public void del(int row) throws Exception {
@@ -129,7 +137,7 @@ public class Controller {
 
         String textoInstrumento;
 
-        List<Calibraciones> calibracionesDelInstrumento = model.getCurrent().getInstrumento().getCalibraciones();
+        List<Calibraciones> calibracionesDelInstrumento = Service.instance().searchCalibracionesByInstrumento(model.getCurrent().getInstrumento().getSerie());
 
         if (!model.getCurrent().getInstrumento().getSerie().isEmpty()) {
             textoInstrumento = model.getCurrent().getInstrumento().getSerie() + " - " + model.getCurrent().getInstrumento().getDescripcion() + "(" + model.getCurrent().getInstrumento().getMinimo() + "-" + model.getCurrent().getInstrumento().getMaximo() + " Grados Celsius)";
@@ -138,6 +146,7 @@ public class Controller {
             calibracionesDelInstrumento = new ArrayList<>(); // Crea una lista vacía
         }
 
+        model.getCurrent().getInstrumento().setCalibraciones(calibracionesDelInstrumento);
         // Actualiza la tabla con la lista de calibraciones (puede estar vacía)
         int[] cols = {TableModel.NUMERO, TableModel.FECHA, TableModel.MEDICIONES};
         view.getList().setModel(new TableModel(cols, calibracionesDelInstrumento));

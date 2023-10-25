@@ -85,6 +85,23 @@ public class CalibracionesDao {
         return resultado;
     }
 
+    public List<Calibraciones> searchCalibracionesByInstrumento(String serie){
+        List<Calibraciones> cali = new ArrayList<>();
+        String sql = "select * from " +
+                "Calibraciones i " +
+                "where i.instrumento_serie=?";
+        try {
+            PreparedStatement stm = db.prepareStatement(sql);
+            stm.setString(1, serie);
+            ResultSet rs = db.executeQuery(stm);
+            while (rs.next()) {
+                cali.add(from(rs, "i"));
+            }
+        } catch (Exception e) {
+        }
+        return cali;
+    }
+
     public Calibraciones from(ResultSet rs, String alias) throws Exception {
         InstrumentoDao ed = new InstrumentoDao();
         Calibraciones e = new Calibraciones();

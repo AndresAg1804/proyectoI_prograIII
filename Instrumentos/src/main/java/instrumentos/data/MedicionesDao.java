@@ -48,10 +48,10 @@ public class MedicionesDao {
     public void update(Mediciones e) throws Exception {
         String sql = "update " +
                 "Mediciones " +
-                "set referencia=?" +
+                "set lectura=?" +
                 "where medida=?";
         PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, e.getReferencia());
+        stm.setString(1, String.valueOf(e.getLectura()));
         stm.setString(2, e.getMedida());
         int count = db.executeUpdate(stm);
         if (count == 0) {
@@ -84,6 +84,23 @@ public class MedicionesDao {
             resultado.add(from(rs, "i"));
         }
         return resultado;
+    }
+
+    public List<Mediciones> searchMedicionesByCalibracion(String id){
+        List<Mediciones> med = new ArrayList<>();
+        String sql = "select * from " +
+                "Mediciones i " +
+                "where i.calibracion_id=?";
+        try {
+            PreparedStatement stm = db.prepareStatement(sql);
+            stm.setString(1, id);
+            ResultSet rs = db.executeQuery(stm);
+            while (rs.next()) {
+                med.add(from(rs, "i"));
+            }
+        } catch (Exception e) {
+        }
+        return med;
     }
 
     public Mediciones from(ResultSet rs, String alias) throws Exception {
