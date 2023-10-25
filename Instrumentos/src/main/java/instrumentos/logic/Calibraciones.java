@@ -43,14 +43,14 @@ public class Calibraciones {
             for (int i = 1; i < mediciones + 1; i++) {
                 if (i == 1) {
                     Mediciones med = new Mediciones();
-                    med.setMedida(String.valueOf(1));
+                   // med.setMedida(String.valueOf(1));
                     med.setReferencia("0");
                     med.setLectura(0);
                     med.setCalibraciones(this);
                     medicionesList.add(med);
                 } else {
                     Mediciones med = new Mediciones();
-                    med.setMedida(String.valueOf(i));
+                    //med.setMedida(String.valueOf(i));
                     med.setReferencia(String.valueOf(refValor2));
                     med.setLectura(0);
                     med.setCalibraciones(this);

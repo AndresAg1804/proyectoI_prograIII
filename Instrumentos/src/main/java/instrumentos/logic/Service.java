@@ -82,7 +82,15 @@ public class Service {
     //================= Calibraciones ============
 
     public void create(Calibraciones e) throws Exception{
-        calibracionesDao.create(e);
+        int id = calibracionesDao.create(e);
+        e.setNumero(String.valueOf(id));
+        e.getMedicionesList().forEach((med) -> {   // for each medicion in calibracion
+            try {
+               int medida =  medicionesDao.create(med);
+               med.setMedida(String.valueOf(medida));
+            } catch (Exception ex) {
+            }
+        });
     }
 
     public Calibraciones read(Calibraciones e) throws Exception{
@@ -99,5 +107,27 @@ public class Service {
 
     public List<Calibraciones> search(Calibraciones v) throws Exception {
         return calibracionesDao.search(v);
+    }
+
+    //================= Mediciones ============
+
+    public void create(Mediciones e) throws Exception{
+        medicionesDao.create(e);
+    }
+
+    public Mediciones read(Mediciones e) throws Exception{
+        return medicionesDao.read(e.getMedida());
+    }
+
+    public void update(Mediciones e)throws Exception{
+        medicionesDao.update(e);
+    }
+
+    public void delete(Mediciones e)throws Exception{
+        medicionesDao.delete(e);
+    }
+
+    public List<Mediciones> search(Mediciones v) throws Exception {
+        return medicionesDao.search(v);
     }
 }

@@ -30,10 +30,10 @@ CREATE TABLE Calibraciones (
 );
 
 CREATE TABLE Mediciones (
-     medida varchar(10) not null,
-     referencia varchar(10) not null,
-     lectura varchar (10) not null,
-     calibracion_id int,
+     medida int AUTO_INCREMENT not null,
+     referencia int  not null,
+     lectura int not null,
+     calibracion_id int not null,
      Primary Key (medida)
 );
 ALTER TABLE Instrumento ADD Foreign Key (tipo) REFERENCES TipoInstrumento(codigo);

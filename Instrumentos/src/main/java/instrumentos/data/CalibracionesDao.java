@@ -14,23 +14,25 @@ public class CalibracionesDao {
         db = Database.instance();
     }
 
-    public void create(Calibraciones e) throws Exception {
+    public int create(Calibraciones e) throws Exception {
         String sql = "insert into " +
                 "Calibraciones " +
-                "(id, fecha, mediciones, instrumento_serie) " +
-                "values(?,?,?,?)";
+                "(fecha, mediciones, instrumento_serie) " +
+                "values(?,?,?)";
         PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, e.getNumero());
-        stm.setString(2, e.getFecha());
-        stm.setString(3, String.valueOf(e.getMediciones()));
-        stm.setString(4, String.valueOf(e.getInstrumento().getSerie()));
+        //stm.setString(1, e.getNumero());
+        stm.setString(1, e.getFecha());
+        stm.setString(2, String.valueOf(e.getMediciones()));
+        stm.setString(3, String.valueOf(e.getInstrumento().getSerie()));
 
-        db.executeUpdate(stm);
+        ResultSet keys = db.executeUpdateWithKeys(stm);
+        keys.next();
+        return keys.getInt(1);
     }
 
     public Calibraciones read(String id) throws Exception {
         String sql = "select * from " +
-                "Calibraciones i inner join Instrumento t on i.instrumento_serie=t.serie " +
+                "Calibraciones i " +
                 "where i.id=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, id);
@@ -72,7 +74,7 @@ public class CalibracionesDao {
     public List<Calibraciones> search(Calibraciones e) throws Exception {
         List<Calibraciones> resultado = new ArrayList<Calibraciones>();
         String sql = "select * from " +
-                "Calibraciones i inner join Instrumento t on i.instrumento_serie=t.serie " +
+                "Calibraciones i " +
                 "where i.id like ?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, "%" + e.getNumero() + "%");
@@ -89,7 +91,7 @@ public class CalibracionesDao {
         e.setNumero(rs.getString(alias + ".id"));
         e.setFecha(rs.getString(alias + ".fecha"));
         e.setMediciones(Integer.parseInt(rs.getString(alias + ".mediciones")));
-        e.setInstrumento(ed.from(rs,"t"));
+        //e.setInstrumento(ed.from(rs,"t"));
         return e;
     }
 

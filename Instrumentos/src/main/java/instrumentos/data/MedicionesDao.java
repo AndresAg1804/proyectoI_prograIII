@@ -1,5 +1,6 @@
 package instrumentos.data;
 
+
 import instrumentos.logic.Instrumento;
 import instrumentos.logic.Mediciones;
 
@@ -15,22 +16,24 @@ public class MedicionesDao {
         db = Database.instance();
     }
 
-    public void create(Mediciones e) throws Exception {
+    public int create(Mediciones e) throws Exception {
         String sql = "insert into " +
                 "Mediciones " +
-                "(medida, referencia, lectura, calibracion_id) " +
-                "values(?,?,?,?)";
+                "(referencia, lectura, calibracion_id) " +
+                "values(?,?,?)";
         PreparedStatement stm = db.prepareStatement(sql);
-        stm.setString(1, e.getMedida());
-        stm.setString(2, e.getReferencia());
-        stm.setString(3, String.valueOf(e.getLectura()));
-        stm.setString(4, String.valueOf(e.getCalibraciones().getNumero()));
-        db.executeUpdate(stm);
+        stm.setString(1, e.getReferencia());
+        stm.setString(2, String.valueOf(e.getLectura()));
+        stm.setString(3, String.valueOf(e.getCalibraciones().getNumero()));
+
+        ResultSet keys = db.executeUpdateWithKeys(stm);
+        keys.next();
+        return keys.getInt(1);
     }
 
     public Mediciones read(String serie) throws Exception {
         String sql = "select * from " +
-                "Mediciones i inner join Calibraciones t on i.calibracion_id=t.numero " +
+                "Mediciones i " +
                 "where i.serie=?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, serie);
@@ -72,7 +75,7 @@ public class MedicionesDao {
     public List<Mediciones> search(Mediciones e) throws Exception {
         List<Mediciones> resultado = new ArrayList<Mediciones>();
         String sql = "select * from " +
-                "Mediciones i inner join Calibraciones t on i.calibracion_id=t.numero " +
+                "Mediciones i " +
                 "where i.medida like ?";
         PreparedStatement stm = db.prepareStatement(sql);
         stm.setString(1, "%" + e.getMedida() + "%");
@@ -87,7 +90,7 @@ public class MedicionesDao {
         CalibracionesDao ed = new CalibracionesDao();
         Mediciones e = new Mediciones();
         e.setMedida(rs.getString(alias + ".medida"));
-        e.setCalibraciones(ed.from(rs,"t"));
+        //e.setCalibraciones(ed.from(rs,"t"));
         e.setReferencia(rs.getString(alias + ".referencia"));
         e.setLectura(Integer.parseInt(rs.getString(alias+".lectura")));
         return e;

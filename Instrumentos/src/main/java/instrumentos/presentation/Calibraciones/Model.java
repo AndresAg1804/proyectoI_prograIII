@@ -28,7 +28,7 @@ public class Model extends java.util.Observable{
         return instrumento;
     }
 
-    Instrumento instrumento;
+    Instrumento instrumento = new Instrumento();
 
     public int getMode() {
         return mode;

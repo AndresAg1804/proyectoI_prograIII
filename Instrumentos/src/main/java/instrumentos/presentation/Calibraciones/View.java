@@ -50,13 +50,12 @@ public class View implements Observer {
                 instruField.setForeground(Color.RED);
                 instruField.setText(controller.shown());
                 numero.setEnabled(false);
+                numero.setText("0");
                 clearTextFields();  //agregado por los loles
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date fechaActual = new Date();
                 String fechaActualFormateada = dateFormat.format(fechaActual);
-
-                // Establecer la fecha actual formateada como valor por defecto en el TextField 'fecha'
                 fecha.setText(fechaActualFormateada);
 
                 Medi.setVisible(false);  //agregado por los loles
@@ -102,10 +101,11 @@ public class View implements Observer {
         save.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Date fechaActual = new Date();
                 String fechaActualFormateada = dateFormat.format(fechaActual);
                 fecha.setText(fechaActualFormateada);
+                //numero.setText("0");
                 Calibraciones filter = new Calibraciones(model.getCurrent().getInstrumento(),fecha.getText(),Integer.parseInt(mediciones.getText()));
 
                 try {
