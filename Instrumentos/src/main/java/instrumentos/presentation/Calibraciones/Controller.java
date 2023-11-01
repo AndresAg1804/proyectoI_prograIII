@@ -36,7 +36,7 @@ public class Controller {
         if(filter==null){
             instru.setCalibraciones(existentes);
             model.setList(existentes);
-            model.setCurrent(existentes.get(0));
+            //model.setCurrent(existentes.get(0));
             model.commit();
             return;
         }
@@ -63,7 +63,7 @@ public class Controller {
 
         model.setList(rows);
         instru.setCalibraciones(rows);
-        model.setCurrent(rows.get(0));
+        //model.setCurrent(rows.get(0));
         model.commit();
         instru.setCalibraciones(existentes);
     }
